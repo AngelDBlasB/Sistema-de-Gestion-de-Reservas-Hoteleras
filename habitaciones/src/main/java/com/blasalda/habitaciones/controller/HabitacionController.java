@@ -4,7 +4,11 @@ import com.blasalda.commons.controller.CommonController;
 import com.blasalda.commons.dto.habitacion.HabitacionRequest;
 import com.blasalda.commons.dto.habitacion.HabitacionResponse;
 import com.blasalda.habitaciones.service.HabitacionService;
+import jakarta.validation.constraints.Positive;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,6 +17,13 @@ public class HabitacionController extends CommonController<HabitacionRequest, Ha
 
 public HabitacionController(HabitacionService service) {
     super(service);
+}
+
+@GetMapping("/id-habitacion/{id}")
+public ResponseEntity<HabitacionResponse> obtenerHabitacionPorIdSinEstado(
+        @PathVariable @Positive(message = "El ID debe ser positivo") Long id
+){
+    return  ResponseEntity.ok(service.obtenerHabitacionPorIdSinEstado(id));
 }
 
 }

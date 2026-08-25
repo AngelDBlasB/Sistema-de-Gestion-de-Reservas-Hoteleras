@@ -7,6 +7,8 @@ import com.blasalda.habitaciones.entity.Habitacion;
 
 public interface HabitacionService extends CrudService<HabitacionRequest, HabitacionResponse> {
 
+    HabitacionResponse obtenerHabitacionPorIdSinEstado(Long id);
+
 
 
 }

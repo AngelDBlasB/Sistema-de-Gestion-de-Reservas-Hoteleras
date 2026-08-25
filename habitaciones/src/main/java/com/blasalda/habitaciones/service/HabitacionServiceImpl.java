@@ -39,6 +39,15 @@ public class HabitacionServiceImpl implements HabitacionService {
     }
 
     @Override
+    public HabitacionResponse obtenerHabitacionPorIdSinEstado(Long id) {
+        log.info("Buscando habitacion sin estado con id{}",id);
+
+        return habitacionMapper.entidadAResponse(habitacionRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "Habitacion sin estado no encontrado con id: " + id)));
+    }
+
+    @Override
     public HabitacionResponse registrar(HabitacionRequest request) {
 
         log.info("Registrando nueva habitación: {}", request.numeroHabitacion());
