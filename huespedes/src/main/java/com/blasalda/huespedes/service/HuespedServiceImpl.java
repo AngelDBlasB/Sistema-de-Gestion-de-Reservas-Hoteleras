@@ -53,6 +53,11 @@ public class HuespedServiceImpl implements HuespedService {
     }
 
     @Override
+    public HuespedResponse obtenerPorIdSinEstado(Long id) {
+        return huespedMapper.entidadAResponse(obtenerHuespedOExcepcion(id));
+    }
+
+    @Override
     public HuespedResponse actualizar(HuespedRequest request, Long id) {
 
         validarEmailUnico(request.email());
@@ -92,18 +97,20 @@ public class HuespedServiceImpl implements HuespedService {
                 RecursoNoEncontradoException("Huésped no encontrado"));
     }
 
-    private void validarEmailUnico(String email){
-        if(huespedRepository.existsByEmailAndEstadoRegistro(email, EstadoRegistro.ACTIVO)){
+    private void validarEmailUnico(String email) {
+        if (huespedRepository.existsByEmailAndEstadoRegistro(email, EstadoRegistro.ACTIVO)) {
             throw new IllegalArgumentException("El email ya está en uso");
         }
     }
-    private void validarTelefonolUnico(String telefono){
-        if(huespedRepository.existsByTelefonoAndEstadoRegistro(telefono, EstadoRegistro.ACTIVO)){
+
+    private void validarTelefonolUnico(String telefono) {
+        if (huespedRepository.existsByTelefonoAndEstadoRegistro(telefono, EstadoRegistro.ACTIVO)) {
             throw new IllegalArgumentException("El teléfono ya está en uso");
         }
     }
-    private void validarDocumentoUnico(String documento){
-        if(huespedRepository.existsByDocumentoAndEstadoRegistro(documento, EstadoRegistro.ACTIVO)){
+
+    private void validarDocumentoUnico(String documento) {
+        if (huespedRepository.existsByDocumentoAndEstadoRegistro(documento, EstadoRegistro.ACTIVO)) {
             throw new IllegalArgumentException("El documento ya está en uso");
         }
     }
