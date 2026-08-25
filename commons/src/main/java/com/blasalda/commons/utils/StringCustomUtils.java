@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 public class StringCustomUtils {
 
 
-
     public static void validarNoVacio(String texto, String mensaje) {
         if (texto == null || texto.isBlank())
             throw new IllegalArgumentException(mensaje);
@@ -36,6 +35,7 @@ public class StringCustomUtils {
         final DateTimeFormatter formato = DateTimeFormatter.ofPattern(patron);
         return fecha == null ? null : fecha.format(formato);
     }
+
     public static String localTimeAString(LocalTime fecha, String patron) {
         final DateTimeFormatter formato = DateTimeFormatter.ofPattern(patron);
         return fecha == null ? null : fecha.format(formato);
@@ -53,5 +53,19 @@ public class StringCustomUtils {
                 .replace("ñ", "n")
                 .replaceAll("[^a-z]", "");
     }
+
+    public static void validarEdad(LocalDate fecha) {
+        int edad = LocalDate.now().getYear() - fecha.getYear();
+        if (edad < 0 || edad > 150)
+            throw new IllegalArgumentException("La edad del huésped debe estar entre 0 y 150 años.");
+
+        if (edad < 18)
+            throw new IllegalArgumentException("El huésped debe ser mayor de edad.");
+    }
+
+    public static Integer obtenerEdad(LocalDate fecha) {
+        return LocalDate.now().getYear() - fecha.getYear() ;
+    }
+
 
 }
