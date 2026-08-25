@@ -10,7 +10,7 @@ spring:
         webflux:
           routes:
             - id: huespedes
-              uri: lb://habitaciones
+              uri: lb://huespedes
               predicates:
                 - Path=/api/huespedes/**
               filters:

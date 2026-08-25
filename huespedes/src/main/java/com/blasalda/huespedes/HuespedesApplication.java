@@ -3,7 +3,7 @@ package com.blasalda.huespedes;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.blasalda.huespedes", "com.blasalda.commons"})
 public class HuespedesApplication {
 
 	public static void main(String[] args) {
