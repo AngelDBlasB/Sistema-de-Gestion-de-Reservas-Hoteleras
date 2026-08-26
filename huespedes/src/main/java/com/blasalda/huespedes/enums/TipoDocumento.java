@@ -13,7 +13,7 @@ public enum TipoDocumento {
 
     private final Long codigo;
 
-    public String descripcion;
+    public final String descripcion;
 
     public static TipoDocumento getTipoDocumento(Long codigo) {
         for (TipoDocumento tipoDocumento : TipoDocumento.values()) {
