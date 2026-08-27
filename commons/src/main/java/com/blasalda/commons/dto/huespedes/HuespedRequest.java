@@ -6,15 +6,15 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 public record HuespedRequest(
         @NotBlank(message = "El nombre del huésped es requerido")
-        @Size(min = 5, max = 50, message = "El nombre debe tener entre 5 y 50 caracteres")
+        @Size(min = 2, max = 50, message = "El nombre debe tener entre 5 y 50 caracteres")
         String nombre,
 
         @NotBlank(message = "El apellido paterno del huésped es requerido")
-        @Size(min = 5, max = 50, message = "El apellido paterno debe tener entre 5 y 50 caracteres")
+        @Size(min = 2, max = 50, message = "El apellido paterno debe tener entre 5 y 50 caracteres")
         String apellidoPaterno,
 
         @NotBlank(message = "El apellido materno del huésped es requerido")
-        @Size(min = 5, max = 50, message = "El apellido materno debe tener entre 5 y 50 caracteres")
+        @Size(min = 2, max = 50, message = "El apellido materno debe tener entre 5 y 50 caracteres")
         String apellidoMaterno,
 
         @NotNull(message = "La fecha de nacimiento  es requerida")
