@@ -1,4 +1,4 @@
-package com.blasalda.commons.enums;
+package com.blasalda.habitaciones.enums;
 
 import com.blasalda.commons.exceptions.RecursoNoEncontradoException;
 import lombok.Getter;

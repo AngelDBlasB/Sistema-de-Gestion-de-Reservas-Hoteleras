@@ -2,8 +2,9 @@ package com.blasalda.habitaciones.service;
 
 import com.blasalda.commons.dto.habitacion.HabitacionRequest;
 import com.blasalda.commons.dto.habitacion.HabitacionResponse;
+import com.blasalda.commons.enums.EstadoHabitacion;
 import com.blasalda.commons.enums.EstadoRegistro;
-import com.blasalda.commons.enums.TipoHabitacion;
+import com.blasalda.habitaciones.enums.TipoHabitacion;
 import com.blasalda.commons.exceptions.RecursoNoEncontradoException;
 import com.blasalda.habitaciones.entity.Habitacion;
 import com.blasalda.habitaciones.mapper.HabitacionMapper;
@@ -95,11 +96,28 @@ public class HabitacionServiceImpl implements HabitacionService {
 
         log.info("Eliminando habitacion con id: {}", id);
 
-        //validarSinCitasConfirmadasOEnCurso(id);
+        validarEstadoHabitacionOcupada(id);
 
         habitacion.eliminar();
 
         log.info("Habitacion eliminado correctamente");
+
+    }
+
+    @Override
+    public void actualizarEstadoHabitacion(Long idHabitacion, Long idEstadoHabitacion) {
+
+        Habitacion habitacion = obtenerHabitacionActivaOExcepciom(idHabitacion);
+
+        log.info("Actualizando estado de la habitacion con id: {}", idHabitacion);
+
+        EstadoHabitacion nuevoEstado = EstadoHabitacion.
+                obtenerEstadoPorCodigo(idEstadoHabitacion);
+
+        habitacion.actualizarEstado(nuevoEstado);
+
+        log.info("Estado de la habitacion actualizada correctamente a: {}", nuevoEstado);
+
 
     }
 
@@ -130,6 +148,14 @@ public class HabitacionServiceImpl implements HabitacionService {
                 request.numeroHabitacion(),EstadoRegistro.ACTIVO,id))
             throw new IllegalArgumentException("Ya existe una habitación activa con el número: "
                     + request.numeroHabitacion());
+
+    }
+
+    private void validarEstadoHabitacionOcupada(Long id){
+
+        if(habitacionRepository.existsByIdAndEstadoHabitacion(id, EstadoHabitacion.OCUPADA))
+            throw new IllegalArgumentException("No se puede eliminar la habitacion en estado: "
+            + EstadoHabitacion.OCUPADA.name());
 
     }
 }

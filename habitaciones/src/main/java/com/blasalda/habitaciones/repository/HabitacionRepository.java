@@ -1,5 +1,6 @@
 package com.blasalda.habitaciones.repository;
 
+import com.blasalda.commons.enums.EstadoHabitacion;
 import com.blasalda.commons.enums.EstadoRegistro;
 import com.blasalda.habitaciones.entity.Habitacion;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,7 @@ public interface HabitacionRepository extends JpaRepository<Habitacion, Long> {
     boolean existsByNumeroHabitacionAndEstadoRegistro(Integer numeroHabitacion, EstadoRegistro estadoRegistro);
 
     boolean existsByNumeroHabitacionAndEstadoRegistroAndIdNot(Integer numeroHabitacion, EstadoRegistro estadoRegistro, Long id);
+
+    boolean existsByIdAndEstadoHabitacion(Long id, EstadoHabitacion estadoHabitacion);
 
 }

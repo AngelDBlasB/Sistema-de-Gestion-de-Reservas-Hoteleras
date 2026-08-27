@@ -2,7 +2,7 @@ package com.blasalda.habitaciones.entity;
 
 import com.blasalda.commons.enums.EstadoHabitacion;
 import com.blasalda.commons.enums.EstadoRegistro;
-import com.blasalda.commons.enums.TipoHabitacion;
+import com.blasalda.habitaciones.enums.TipoHabitacion;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -96,5 +96,14 @@ public class Habitacion {
     public void eliminar(){
         validarNoEliminado();
         this.estadoRegistro = EstadoRegistro.ELIMINADO;
+    }
+
+    public void actualizarEstado(EstadoHabitacion estadoHabitacion) {
+        validarNoEliminado();
+
+        if (estadoHabitacion == null)
+            throw new IllegalArgumentException("El estado de la habitación es requerido");
+
+        this.estadoHabitacion = estadoHabitacion;
     }
 }

@@ -1,13 +1,11 @@
 package com.blasalda.commons.dto.habitacion;
 
-import com.blasalda.commons.enums.EstadoHabitacion;
-import com.blasalda.commons.enums.TipoHabitacion;
-
 import java.math.BigDecimal;
 
 public record HabitacionResponse(
 
         Long id,
+        Long idEstadoHabitacion,
         String estadoHabitacion,
         Integer numeroHabitacion,
         String tipo,
