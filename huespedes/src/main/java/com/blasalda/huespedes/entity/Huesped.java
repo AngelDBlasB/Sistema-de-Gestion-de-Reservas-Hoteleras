@@ -3,7 +3,7 @@ package com.blasalda.huespedes.entity;
 import com.blasalda.commons.enums.EstadoRegistro;
 import com.blasalda.commons.utils.StringCustomUtils;
 import com.blasalda.commons.utils.ValoresNumericosUtils;
-import com.blasalda.huespedes.enums.TipoDocumento;
+import com.blasalda.commons.enums.TipoDocumento;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -71,13 +71,13 @@ public class Huesped {
             String nacionalidad
     ) {
         StringCustomUtils.validarEdad(fechaNacimiento);
-        StringCustomUtils.validarTamanio(nombre, 5, 50, "El nombre del huésped debe de tener un mínimo de 5 y un máximo de 100 letras.");
-        StringCustomUtils.validarTamanio(apellidoPaterno, 5, 50, "El apellido paterno del huésped debe de tener un mínimo de 5 y un máximo de 100 letras.");
-        StringCustomUtils.validarTamanio(apellidoMaterno, 5, 50, "El apellido materno del huésped debe de tener un mínimo de 5 y un máximo de 100 letras.");
+        StringCustomUtils.validarTamanio(nombre, 2, 50, "El nombre del huésped debe de tener un mínimo de 2 y un máximo de 50 letras.");
+        StringCustomUtils.validarTamanio(apellidoPaterno, 2, 50, "El apellido paterno del huésped debe de tener un mínimo de 2 y un máximo de 50 letras.");
+        StringCustomUtils.validarTamanio(apellidoMaterno, 2, 50, "El apellido materno del huésped debe de tener un mínimo de 2 y un máximo de 50 letras.");
         StringCustomUtils.validarTamanio(email, 5, 100, "El email del huésped debe de tener un mínimo de 5 y un máximo de 100 letras.");
-        StringCustomUtils.validarTamanio(telefono, 10, 10, "El teléfono del huésped debe de tener un mínimo de 5 y un máximo de 100 letras.");
-        StringCustomUtils.validarTamanio(documento, 5, 20, "El documento del huésped debe de tener un mínimo de 5 y un máximo de 100 letras.");
-        StringCustomUtils.validarTamanio(nacionalidad, 5, 50, "La nacionalidad del huésped debe de tener un mínimo de 5 y un máximo de 100 letras.");
+        StringCustomUtils.validarTamanio(telefono, 10, 10, "El teléfono del huésped debe de tener un mínimo de 10 y un máximo de 10 letras.");
+        StringCustomUtils.validarTamanio(documento, 5, 20, "El documento del huésped debe de tener un mínimo de 5 y un máximo de 20 letras.");
+        StringCustomUtils.validarTamanio(nacionalidad, 5, 50, "La nacionalidad del huésped debe de tener un mínimo de 5 y un máximo de 50 letras.");
     }
 
     private void validarNoEliminado() {

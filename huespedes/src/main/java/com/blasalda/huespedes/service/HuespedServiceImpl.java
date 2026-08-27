@@ -5,7 +5,7 @@ import com.blasalda.commons.dto.huespedes.HuespedResponse;
 import com.blasalda.commons.enums.EstadoRegistro;
 import com.blasalda.commons.exceptions.RecursoNoEncontradoException;
 import com.blasalda.huespedes.entity.Huesped;
-import com.blasalda.huespedes.enums.TipoDocumento;
+import com.blasalda.commons.enums.TipoDocumento;
 import com.blasalda.huespedes.mappers.HuespedMapper;
 import com.blasalda.huespedes.repository.HuespedRepository;
 import lombok.AllArgsConstructor;
@@ -60,11 +60,11 @@ public class HuespedServiceImpl implements HuespedService {
     @Override
     public HuespedResponse actualizar(HuespedRequest request, Long id) {
 
-        validarEmailUnico(request.email());
+        validarEmailUnico(request.email(), id);
 
-        validarTelefonolUnico(request.telefono());
+        validarTelefonolUnico(request.telefono(), id);
 
-        validarDocumentoUnico(request.documento());
+        validarDocumentoUnico(request.documento(), id);
 
         Huesped huesped = obtenerHuespedOExcepcion(id);
 
@@ -103,14 +103,32 @@ public class HuespedServiceImpl implements HuespedService {
         }
     }
 
+    private void validarEmailUnico(String email, Long id) {
+        if (huespedRepository.existsByEmailAndEstadoRegistroAndIdNot(email, EstadoRegistro.ACTIVO, id)) {
+            throw new IllegalArgumentException("El email ya está en uso");
+        }
+    }
+
     private void validarTelefonolUnico(String telefono) {
         if (huespedRepository.existsByTelefonoAndEstadoRegistro(telefono, EstadoRegistro.ACTIVO)) {
             throw new IllegalArgumentException("El teléfono ya está en uso");
         }
     }
 
+    private void validarTelefonolUnico(String telefono, Long id) {
+        if (huespedRepository.existsByTelefonoAndEstadoRegistroAndIdNot(telefono, EstadoRegistro.ACTIVO, id)) {
+            throw new IllegalArgumentException("El teléfono ya está en uso");
+        }
+    }
+
     private void validarDocumentoUnico(String documento) {
         if (huespedRepository.existsByDocumentoAndEstadoRegistro(documento, EstadoRegistro.ACTIVO)) {
+            throw new IllegalArgumentException("El documento ya está en uso");
+        }
+    }
+
+    private void validarDocumentoUnico(String documento, Long id) {
+        if (huespedRepository.existsByDocumentoAndEstadoRegistroAndIdNot(documento, EstadoRegistro.ACTIVO, id)) {
             throw new IllegalArgumentException("El documento ya está en uso");
         }
     }

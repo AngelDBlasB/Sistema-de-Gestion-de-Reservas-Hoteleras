@@ -13,9 +13,15 @@ public interface HuespedRepository extends JpaRepository<Huesped, Long> {
 
     Boolean existsByEmailAndEstadoRegistro(String email, EstadoRegistro estadoRegistro);
 
+    Boolean existsByEmailAndEstadoRegistroAndIdNot(String email, EstadoRegistro estadoRegistro, Long id);
+
     Boolean existsByTelefonoAndEstadoRegistro(String telefono, EstadoRegistro estadoRegistro);
 
+    Boolean existsByTelefonoAndEstadoRegistroAndIdNot(String telefono, EstadoRegistro estadoRegistro, Long id);
+
     Boolean existsByDocumentoAndEstadoRegistro(String documento, EstadoRegistro estadoRegistro);
+
+    Boolean existsByDocumentoAndEstadoRegistroAndIdNot(String documento, EstadoRegistro estadoRegistro, Long id);
 
     Optional<Huesped> findByIdAndEstadoRegistro(Long id, EstadoRegistro estadoRegistro);
 }
