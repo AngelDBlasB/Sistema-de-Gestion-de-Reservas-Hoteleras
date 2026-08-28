@@ -101,12 +101,12 @@ public class ReservacionServiceImpl implements ReservacionService {
 
         HabitacionResponse habitacion = habitacionClient.obtenerHabitacionActivaPorId(request.idHabitacion());
 
-        reservacion.actualizar(
-                huesped.id(),
-                habitacion.id(),
-                request.fechaEntrada(),
-                request.fechaSalida()
-        );
+        switch (EstadoReserva.ObtenerEstadoReservaPorCodigo(reservacion.getEstadoReserva().getCodigo())) {
+            case CONFIRMADA -> reservacion.actualizar(request.fechaEntrada(), request.fechaSalida());
+            case EN_CURSO -> reservacion.actualizar(request.fechaSalida());
+            case CANCELADA, FINALIZADA ->
+                    throw new IllegalArgumentException("La cita no se puede editar si está cancelada o finalizada");
+        }
 
         reservacionRepository.save(reservacion);
         return reservacionMapper.entidadAResponse(reservacion, huesped, habitacion);
@@ -118,6 +118,12 @@ public class ReservacionServiceImpl implements ReservacionService {
         log.info("Cambiando estado Reservación");
 
         Reservacion reservacion = obtenerReservacionActivaOExcepcion(id);
+
+        if (reservacion.getEstadoReserva().getCodigo().equals(EstadoReserva.EN_CURSO.getCodigo())) {
+            if (EstadoReserva.CANCELADA.getCodigo().equals(idEstadoReserva)) {
+                throw new IllegalStateException("La reserva no se puede cancelar si está en curso");
+            }
+        }
 
         reservacion.cambiarEstado(EstadoReserva.ObtenerEstadoReservaPorCodigo(idEstadoReserva));
 

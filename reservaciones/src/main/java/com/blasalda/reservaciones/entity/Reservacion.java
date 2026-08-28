@@ -49,7 +49,8 @@ public class Reservacion {
         if (fechaEntrada == null || !fechaEntrada.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("La fecha de entrada de la reservación es requerida y debe ser futura");
         }
-        if (fechaSalida == null || !fechaSalida.isAfter(fechaEntrada)) {
+
+        if (fechaSalida == null || (!fechaSalida.isAfter(fechaEntrada) && !fechaSalida.equals(fechaEntrada))) {
             throw new IllegalArgumentException("La fecha de salida de la reservación es requerida y debe ser futura");
         }
 
@@ -75,22 +76,42 @@ public class Reservacion {
     }
 
     public void actualizar(
-            Long idHuesped,
+            LocalDate fechaSalida
+    ) {
+        validarNoEliminado();
+        validarFechas(this.fechaEntrada, fechaSalida);
+        this.fechaSalida = fechaSalida;
+    }
+
+    public void actualizar(
+            LocalDate fechaEntrada,
+            LocalDate fechaSalida
+    ) {
+        validarNoEliminado();
+        validarFechas(fechaEntrada, fechaSalida);
+        this.fechaEntrada = fechaEntrada;
+        this.fechaSalida = fechaSalida;
+    }
+
+    public void actualizar(
             Long idHabitacion,
             LocalDate fechaEntrada,
             LocalDate fechaSalida
     ) {
         validarNoEliminado();
-        validarDatos(idHuesped, idHabitacion, this.getEstadoReserva().getCodigo(), fechaEntrada, fechaSalida);
-        this.idHuesped = idHuesped;
+        validarFechas(fechaEntrada, fechaSalida);
         this.idHabitacion = idHabitacion;
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
     }
 
-    public void cambiarEstado(EstadoReserva estadoReserva) {
-        this.estadoReserva = estadoReserva;
+    public void cambiarEstado(EstadoReserva nuevoEstado) {
+        if (estadoReserva == null) return;
+        if (!estadoReserva.puedeCambiarA(nuevoEstado)) throw new
+                IllegalArgumentException("El estado de la reserva no puede cambiar a " + nuevoEstado + " solo puede cambiar a " + estadoReserva.puedeCambiar());
+        this.estadoReserva = nuevoEstado;
     }
+
 
     public static Reservacion crear(
             Long idHuesped,
