@@ -5,11 +5,15 @@ import com.blasalda.commons.dto.habitacion.HabitacionResponse;
 import com.blasalda.commons.dto.huespedes.DatosHuesped;
 import com.blasalda.commons.dto.huespedes.HuespedResponse;
 import com.blasalda.commons.mapper.CommonMapper;
+import com.blasalda.commons.utils.StringCustomUtils;
+import com.blasalda.commons.utils.ValoresNumericosUtils;
 import com.blasalda.reservaciones.dto.ReservacionRequest;
 import com.blasalda.reservaciones.dto.ReservacionResponse;
 import com.blasalda.reservaciones.entity.Reservacion;
 import com.blasalda.reservaciones.enums.EstadoReserva;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class ReservacionMapper implements CommonMapper<ReservacionRequest, ReservacionResponse, Reservacion> {
@@ -57,10 +61,10 @@ public class ReservacionMapper implements CommonMapper<ReservacionRequest, Reser
         if (datosHuesped == null) return null;
         return new DatosHuesped(
                 datosHuesped.nombre(),
-                datosHuesped.edad(),
+                String.join(" ", String.valueOf(LocalDate.now().getYear() - datosHuesped.edad().getYear()), " años"),
                 datosHuesped.telefono(),
                 datosHuesped.email(),
-                datosHuesped.tipoDocumento(),
+                datosHuesped.tipoDocumento().descripcion,
                 datosHuesped.nacionalidad()
         );
     }
