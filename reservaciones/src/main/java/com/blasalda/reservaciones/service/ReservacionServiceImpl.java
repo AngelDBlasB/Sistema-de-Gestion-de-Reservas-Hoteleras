@@ -4,6 +4,7 @@ import com.blasalda.commons.clients.HabitacionClient;
 import com.blasalda.commons.clients.HuespedClient;
 import com.blasalda.commons.dto.habitacion.HabitacionResponse;
 import com.blasalda.commons.dto.huespedes.HuespedResponse;
+import com.blasalda.commons.enums.EstadoHabitacion;
 import com.blasalda.commons.enums.EstadoRegistro;
 import com.blasalda.commons.exceptions.RecursoNoEncontradoException;
 import com.blasalda.reservaciones.dto.ReservacionRequest;
@@ -69,15 +70,26 @@ public class ReservacionServiceImpl implements ReservacionService {
 
         log.info("Registrando nueva reservación");
 
-        HuespedResponse huespedResponse = huespedClient.obtenerHuespedActivoPorId(request.idHuesped());
+        HuespedResponse huesped = huespedClient.obtenerHuespedActivoPorId(request.idHuesped());
 
-        HabitacionResponse habitacionResponse = habitacionClient.obtenerHabitacionActivaPorId(request.idHabitacion());
+        HabitacionResponse habitacion = habitacionClient.obtenerHabitacionActivaPorId(request.idHabitacion());
+        validarHabitacionActivaDisponible(habitacion);
 
         Reservacion reservacion = reservacionMapper.requestAEntidad(request);
 
         reservacionRepository.save(reservacion);
 
-        return reservacionMapper.entidadAResponse(reservacion, huespedResponse, habitacionResponse);
+        habitacionClient.actualizarEstadoHabitacion(
+                reservacion.getIdHabitacion(),
+                EstadoHabitacion.OCUPADA.getCodigo()
+        );
+
+        log.info("Cita registrada exitosamente");
+
+        return reservacionMapper.entidadAResponse(
+                reservacion,
+                huesped,
+                habitacion);
     }
 
     @Override
@@ -111,6 +123,12 @@ public class ReservacionServiceImpl implements ReservacionService {
 
         reservacionRepository.save(reservacion);
 
+        if (EstadoReserva.ObtenerEstadoReservaPorCodigo(idEstadoReserva).equals(EstadoReserva.FINALIZADA))
+            habitacionClient.actualizarEstadoHabitacion(
+                    reservacion.getIdHabitacion(),
+                    EstadoHabitacion.DISPONIBLE.getCodigo()
+            );
+
     }
 
     @Override
@@ -118,7 +136,17 @@ public class ReservacionServiceImpl implements ReservacionService {
 
         Reservacion reservacion = obtenerReservacionActivaOExcepcion(id);
 
+        if (!EstadoReserva.CONFIRMADA.equals(reservacion.getEstadoReserva())) {
+            throw new IllegalArgumentException
+                    ("La reserva solo puede ser cancelada si está en estado CONFIRMADA.");
+        }
+
         reservacion.eliminar();
+
+        habitacionClient.actualizarEstadoHabitacion(
+                reservacion.getIdHabitacion(),
+                EstadoHabitacion.DISPONIBLE.getCodigo()
+        );
 
         reservacionRepository.save(reservacion);
 
@@ -148,5 +176,15 @@ public class ReservacionServiceImpl implements ReservacionService {
         log.info("Obteniendo Habitación por ID: {}", id);
 
         return habitacionClient.obtenerHabitacionPorId(id);
+    }
+
+    private void validarHabitacionActivaDisponible(HabitacionResponse entidad) {
+
+        if (!EstadoHabitacion.DISPONIBLE.getCodigo().equals(entidad.idEstadoHabitacion())) {
+            throw new IllegalStateException(
+                    "La habitación no está disponible actualmente,se encuentra: " +
+                            entidad.estadoHabitacion()
+            );
+        }
     }
 }

@@ -28,6 +28,6 @@ public class ReservacionController extends CommonController<ReservacionRequest, 
             @PathVariable @Positive(message = "El ID del estado debe ser positivo") Long idEstado
     ) {
         super.service.cambiarEstadoReservacion(idReserva, idEstado);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 }
